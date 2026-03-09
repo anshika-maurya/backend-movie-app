@@ -42,3 +42,17 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
+
+app.get("/api/tmdb/trending", async (req, res) => {
+  try {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/trending/movie/week?api_key=${process.env.TMDB_KEY}`
+    );
+
+    const data = await response.json();
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: "TMDB fetch failed" });
+  }
+});
