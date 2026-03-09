@@ -28,21 +28,19 @@ app.get("/api/tmdb", async (req, res) => {
     const endpoint = req.query.endpoint;
 
     if (!endpoint) {
-      return res.status(400).json({ message: "Endpoint is required" });
+      return res.status(400).json({ message: "Endpoint missing" });
     }
 
-    const separator = endpoint.includes("?") ? "&" : "?";
+    const url = `https://api.themoviedb.org/3/${endpoint}`;
 
-    const url = `https://api.themoviedb.org/3/${endpoint}${separator}api_key=${process.env.TMDB_KEY}`;
-
-    const response = await fetch(url);
+    const response = await fetch(`${url}${url.includes("?") ? "&" : "?"}api_key=${process.env.TMDB_KEY}`);
 
     const data = await response.json();
 
     res.json(data);
 
   } catch (error) {
-    console.error("TMDB Proxy Error:", error);
+    console.error("TMDB proxy error:", error);
     res.status(500).json({ message: "TMDB fetch failed" });
   }
 });
