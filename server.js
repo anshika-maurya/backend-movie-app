@@ -56,3 +56,21 @@ app.get("/api/tmdb/trending", async (req, res) => {
     res.status(500).json({ message: "TMDB fetch failed" });
   }
 });
+
+app.get("/api/tmdb", async (req, res) => {
+  try {
+
+    const endpoint = req.query.endpoint;
+
+    const url = `https://api.themoviedb.org/3/${endpoint}&api_key=${process.env.TMDB_KEY}`;
+
+    const response = await fetch(url);
+
+    const data = await response.json();
+
+    res.json(data);
+
+  } catch (error) {
+    res.status(500).json({ message: "TMDB fetch failed" });
+  }
+});
